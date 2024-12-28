@@ -1,10 +1,16 @@
+---
 name: Lint Code Base
 
+permissions:
+  statuses: write
+  contents: write
+  pull-requests: write
+  
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   run-lint:
@@ -13,7 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Full git history is needed to get a proper list of changed files
           fetch-depth: 0
 
       - name: Get changed files
@@ -52,14 +57,17 @@ jobs:
 
       - name: Check for modified files
         id: git-check
-        run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
+        run: |
+          echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; \
+          else echo "true"; fi)" >> $GITHUB_OUTPUT
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git commit -am "Auto-format with Prettier"
           git push
 
