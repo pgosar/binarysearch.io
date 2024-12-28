@@ -16,6 +16,7 @@ aspect.
 
 ## System Architecture
 
+See the [API description](./API.md)
 
 ### Frontend
 - NextJS
