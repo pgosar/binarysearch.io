@@ -5,7 +5,7 @@ permissions:
   statuses: write
   contents: write
   pull-requests: write
-  
+
 on:
   push:
     branches: ["main"]
@@ -41,7 +41,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Install Prettier
         run: npm install --global prettier
 
