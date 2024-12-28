@@ -21,8 +21,17 @@ jobs:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
           
-      - name: Autoformat Code (Prettier)
-        run: npx prettier --write .
+      - name: prettier
+        run: npx prettier --write *
+      - name: Check for modified files
+        id: git-check
+        run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
+      - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Auto-format with Prettier"
+          git push
 
       - name: Lint Code Base
         uses: github/super-linter@v4
