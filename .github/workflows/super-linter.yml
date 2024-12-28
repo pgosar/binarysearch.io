@@ -36,7 +36,6 @@ jobs:
             **/*.json
             **/*.md
             **/*.yaml
-            **/*.yml
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
