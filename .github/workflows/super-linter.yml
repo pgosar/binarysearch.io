@@ -57,8 +57,8 @@ jobs:
       - name: Check for modified files
         id: git-check
         run: |
-          echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; \
-          else echo "true"; fi)" >> $GITHUB_OUTPUT
+          echo "modified=$(if git diff-index --quiet HEAD --; \
+          then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
@@ -76,3 +76,4 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: "main"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YAML_CONFIG_FILE: .yaml-lint.json

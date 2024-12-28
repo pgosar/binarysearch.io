@@ -1,8 +1,8 @@
 // Define an enum
 enum Role {
-  Admin = "ADMIN",
-  User = "USER",
-  Guest = "GUEST",
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST',
 }
 
 // Interface for a User object
@@ -22,6 +22,7 @@ class UserAccount {
     this.name = name; this.age = age; this.role = role;
   }
 
-  greet(): string {return `Hello, my name is ${this.name}, and I am a ${this.role}.`;
+  greet(): string {
+    return `Hello, my name is ${this.name}, and I am a ${this.role}.`;
   }
 }
