@@ -5,9 +5,9 @@ import Header from './client/components/Header';
 const HomePage = () => {
   return (
     <div>
-      <Header />
-      <h2>Welcome to the Homepage!</h2>
-    </div>
+<Header />
+<h2>Welcome to the Homepage!</h2>
+</div>
   );
 };
 
