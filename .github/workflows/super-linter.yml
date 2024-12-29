@@ -21,7 +21,6 @@ jobs:
         persist-credentials: true
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
-        permissions: write-all
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
