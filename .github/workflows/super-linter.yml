@@ -1,35 +1,73 @@
-name: Lint Code Base
+name: Lint and Format Workflow
 
 permissions:
   statuses: write
   contents: write
   pull-requests: write
-
+  
 on:
-  push:
-    branches: ["main"]
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
-  run-lint:
+  lint-and-format:
+    name: Lint and Format
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "main"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: .
-          FIX_TYPESCRIPT_PRETTIER: true
-          FIX_TYPESCRIPT_ES: true
-          FIX_JAVACRIPT_ES: true
-          FIX_JAVASCRIPT_PRETTIER: true
-          FIX_TSX: true
-          FIX_JSX: true
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Set up Node.js environment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # or your project Node.js version
+        cache: 'yarn'
+
+    # Install dependencies
+    - name: Install dependencies
+      run: yarn install
+
+    # Run Super Linter for specific file types
+    - name: Run Super Linter
+      uses: github/super-linter@v5
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_HTML: true
+        VALIDATE_CSS: true
+        VALIDATE_JAVASCRIPT: true
+        VALIDATE_TYPESCRIPT: true
+        VALIDATE_ALL_CODEBASE: false # Limits linting to enabled file types
+        LINTER_RULES_PATH: .         # Use root ESLint configuration
+
+    # Run ESLint with root configuration
+    - name: Run ESLint
+      run: yarn lint
+
+    # Run Prettier with root configuration
+    - name: Run Prettier
+      run: yarn prettier --write .
+
+    # Check for changes after formatting
+    - name: Check for formatting changes
+      run: git diff --exit-code
+      id: format_check
+
+    # Commit and push changes if formatting was applied
+    - name: Commit and push changes
+      if: steps.format_check.outcome == 'failure'
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add .
+        git commit -m "chore: apply formatting changes"
+        git push
