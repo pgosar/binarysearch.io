@@ -1,8 +1,11 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
+import { extendZod, zodSchema } from '@zodyac/zod-mongoose';
+import {model, Types} from "mongoose";
 
-export const ProblemSchema = z.object({
-    problemId: z.number(),
+extendZod(z);
+
+export const zProblem = z.object({
+    problemId: z.number().unique(),
     name: z.string(),
     description: z.string(), // HTML as a string
     difficultyTag: z.string(),
@@ -10,4 +13,5 @@ export const ProblemSchema = z.object({
     privateTestCases: z.array(z.instanceof(Types.ObjectId)),
 });
 
-export type IProblem = z.infer<typeof ProblemSchema>;
+export const problemSchema = zodSchema(zProblem);
+export const problemModel = model("Profile", problemSchema);

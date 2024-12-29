@@ -1,14 +1,17 @@
 import { z } from 'zod';
-import { extendZod } from '@zodyac/zod-mongoose';
+import { extendZod, zodSchema } from '@zodyac/zod-mongoose';
+import {model} from "mongoose";
 
-
+extendZod(z);
 
 // Define the schema using zod-mongoose and extendZod
-export const ParticipantSchema = extendZod(z.object({
-    userId: z.string(),
-    socket: z.string(), // socket ID
+export const zParticipant = z.object({
+    userId: z.string().unique(),
+    socket: z.string().unique(), // socket ID
     score: z.number(),
     currentlyRunning: z.boolean(),
-}));
+});
 
-export type Participant = z.infer<typeof ParticipantSchema>;
+export const participantSchema = zodSchema(zParticipant);
+export const participantModel = model("Participant", participantSchema);
+

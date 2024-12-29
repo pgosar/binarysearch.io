@@ -33,6 +33,7 @@
     "postcss": "^8.4.49",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "yarn": "^1.22.22",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

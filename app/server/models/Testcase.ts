@@ -1,11 +1,17 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
+import { Types, model } from 'mongoose';
+import { extendZod, zodSchema } from '@zodyac/zod-mongoose';
 
-export const TestcaseSchema = z.object({
-    testcaseId: z.number(),
+extendZod(z);
+
+//Testcase id should be unique. 
+export const zTestCase = z.object({
+    testcaseId: z.number().unique(),
     problemId: z.instanceof(Types.ObjectId),
-    input: z.object({}), // Object, can be more specific depending on your structure
-    output: z.object({}), // Object, can be more specific depending on your structure
+    input: z.object({}), 
+    output: z.object({}), 
 });
 
-export type ITestcase = z.infer<typeof TestcaseSchema>;
+export const testSchema = zodSchema(zTestCase); 
+export const userModel = model("Test", testSchema);
+
