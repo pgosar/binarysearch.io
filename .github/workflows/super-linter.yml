@@ -36,7 +36,7 @@ jobs:
         git config --global --add safe.directory "$GITHUB_WORKSPACE"
         sudo chown -R $USER:$USER .
     - name: Run Prettier
-      run: yarn prettier --write . --ignore-unknown
+      run: yarn format
     - name: Run Super Linter
       uses: github/super-linter@v5
       env:
