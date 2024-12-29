@@ -16,7 +16,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "next lint --fix && prettier '**/*.{json,yaml}' --write",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,yaml,css,scss,md}'",
     "type": "tsc --noEmit",
     "test": "jest"
   },
