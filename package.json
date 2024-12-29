@@ -15,8 +15,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,yaml,css,scss,md}' && eslint . --fix",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "type": "tsc --noEmit",
     "test": "jest"
   },
