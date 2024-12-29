@@ -25,6 +25,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: ./yarn.lock
       - name: Enable corepack and use Yarn
         run: |
           corepack enable
@@ -53,6 +55,7 @@ jobs:
       - name: Check for formatting changes
         run: git diff --exit-code
         id: format_check
+        continue-on-error: true
       - name: Commit and push changes
         if: steps.format_check.outcome == 'failure'
         env:
