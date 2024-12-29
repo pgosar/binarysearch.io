@@ -16,10 +16,6 @@ async function getProfile(req: NextApiRequest, res: NextApiResponse) {
         }
     }
 
-    if (!userId || Array.isArray(userId)) {
-        return res.status(400).json({ message: 'Invalid or missing userId' });
-    }
-
     try {
         const profile = await getUserProfile(userId as string);
         if (!profile) {

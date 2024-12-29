@@ -1636,6 +1636,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zodyac/zod-mongoose@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@zodyac/zod-mongoose@npm:3.0.0"
+  dependencies:
+    mongoose: "npm:^8.0.3"
+    zod: "npm:^3.22.4"
+  checksum: 10/715c23fdab363be525ebc3548b591e7e53863dfd15e5f013e37b25687b9fef291f3e0b76324a4b71b33fc87627836711322348c01266e7b300011ef56bdfe90d
+  languageName: node
+  linkType: hard
+
 "abab@npm:^2.0.6":
   version: 2.0.6
   resolution: "abab@npm:2.0.6"
@@ -5321,7 +5331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongoose@npm:^8.9.2":
+"mongoose@npm:^8.0.3, mongoose@npm:^8.9.2":
   version: 8.9.2
   resolution: "mongoose@npm:8.9.2"
   dependencies:
@@ -5400,6 +5410,7 @@ __metadata:
     "@types/react": "npm:^19.0.2"
     "@types/react-dom": "npm:^19.0.2"
     "@typescript-eslint/eslint-plugin": "npm:^8.18.2"
+    "@zodyac/zod-mongoose": "npm:^3.0.0"
     babel-plugin-react-compiler: "npm:19.0.0-beta-b2e8e9c-20241220"
     classnames: "npm:^2.5.1"
     eslint: "npm:^9.17.0"
@@ -7387,7 +7398,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.24.1":
+"zod@npm:^3.22.4, zod@npm:^3.24.1":
   version: 3.24.1
   resolution: "zod@npm:3.24.1"
   checksum: 10/54e25956495dec22acb9399c168c6ba657ff279801a7fcd0530c414d867f1dcca279335e160af9b138dd70c332e17d548be4bc4d2f7eaf627dead50d914fec27
