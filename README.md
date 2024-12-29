@@ -6,6 +6,7 @@ friends and race to complete problems, with features such as a global experience
 and a leveling system.
 
 ## Goals
+
 The idea is to create a clone of binarysearch that brings back the competitive/multiplayer
 aspect.
 
@@ -13,24 +14,25 @@ aspect.
 - Automatic Testing library to generate testcases for problems of varying input types and constraints
 - A large repository of problems
 
-
 ## System Architecture
 
 See the [API description](./API.md)
 
 ### Frontend
+
 - NextJS
 - ChakraUI
 
-
 ### Backend/Server
+
 - Database: MongoDB (Mongoose)
 - Server Deployment: AWS S3/ECS
 
 #### Services
 
 #### External Libraries
-- Auth: NextAuth 
+
+- Auth: NextAuth
 - Code Execution: Judge0
 - Websocket server: Socket.io
 - Test Framework: TBD
