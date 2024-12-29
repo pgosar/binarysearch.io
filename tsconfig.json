@@ -3,6 +3,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
+    "jsx": "preserve",
     "resolveJsonModule": true,
     "removeComments": true,
     "preserveConstEnums": true,
@@ -26,7 +27,6 @@
     "allowJs": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "preserve",
     "noEmit": true,
     "isolatedModules": true,
     "incremental": true,
@@ -40,11 +40,7 @@
       "@styles/*": ["src/styles/*"],
       "@components/*": ["src/components/*"]
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "plugins": [{ "name": "next" }]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["./out/**/*", "./node_modules/**/*"]

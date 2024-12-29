@@ -29,7 +29,10 @@
 *.tsbuildinfo
 
 ### yarn ###
-.yarn
+.yarn/cache/
+.yarn/sdks/
+.yarn/unplugged/
+.yarn/install-state.gz
 *.log
 
 # Ignore generated files
