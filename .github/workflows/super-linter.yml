@@ -20,6 +20,8 @@ jobs:
       with:
         persist-credentials: true
         fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+        permissions: write-all
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
@@ -30,6 +32,10 @@ jobs:
         corepack prepare yarn@stable --activate
     - name: Install Dependencies
       run: yarn install --frozen-lockfile
+    - name: Set file permissions
+      run: |
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        sudo chown -R $USER:$USER .
     - name: Run Prettier
       run: yarn prettier --write . --ignore-unknown
     - name: Run Super Linter
