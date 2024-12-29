@@ -70,5 +70,12 @@
         "plugin:jest-dom/recommended"
       ]
     }
+  ],
+  "ignorePatterns": [
+    "node_modules/",
+    "build/",
+    "dist/",      // Ignore build directories
+    "public/",    // Ignore the public folder
+    "**/*.md"     // Ignore markdown files
   ]
 }
