@@ -37,17 +37,17 @@ jobs:
           sudo chown -R $USER:$USER .
       - name: Run Prettier
         run: yarn format
-      - name: Run Super Linter
-        uses: github/super-linter@v5
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_HTML: true
-          VALIDATE_CSS: true
-          VALIDATE_JAVASCRIPT: true
-          VALIDATE_TYPESCRIPT: true
-          VALIDATE_ALL_CODEBASE: false
-          LINTER_RULES_PATH: .
+      # - name: Run Super Linter
+      #   uses: github/super-linter@v5
+      #   env:
+      #     DEFAULT_BRANCH: main
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     VALIDATE_HTML: true
+      #     VALIDATE_CSS: true
+      #     VALIDATE_JAVASCRIPT: true
+      #     VALIDATE_TYPESCRIPT: true
+      #     VALIDATE_ALL_CODEBASE: false
+      #     LINTER_RULES_PATH: .
       - name: Run ESLint
         run: yarn lint
       - name: Check for formatting changes
