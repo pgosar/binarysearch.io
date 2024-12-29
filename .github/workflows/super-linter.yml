@@ -44,9 +44,7 @@ jobs:
       - name: Check for formatting changes
         run: git diff --exit-code || [ $? -le 1 ]
         id: format_check
-        continue-on-error: true
       - name: Commit and push changes
-        if: steps.format_check.outcome == 'failure'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
