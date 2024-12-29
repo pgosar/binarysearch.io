@@ -25,22 +25,13 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    # Set up Node.js environment
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: '23'
-        cache: 'yarn'
-        
-      # Enable corepack and activate Yarn
-    - name: Enable corepack and activate Yarn
-      run: |
-        corepack enable
-        corepack prepare yarn@stable --activate
+        node-version: '20'
 
-    # Install dependencies
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
+    - name: Install Dependencies
+      run: npm ci
 
     # Run Super Linter for specific file types
     - name: Run Super Linter
