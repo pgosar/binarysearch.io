@@ -25,7 +25,7 @@ let cached = global.mongoose;
 
 if (!cached) {
   global.mongoose = { conn: null, promise: null };
-  cached = { conn: null, promise: null };
+cached = { conn: null, promise: null };
 }
 
 async function dbConnect() {
