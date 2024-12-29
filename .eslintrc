@@ -1,7 +1,6 @@
 {
   // Configuration for JavaScript files
   "extends": [
-    "airbnb-base",
     "next/core-web-vitals", // Needed to avoid warning in next.js build: 'The Next.js plugin was not detected in your ESLint configuration'
     "plugin:prettier/recommended"
   ],
@@ -24,8 +23,6 @@
         "simple-import-sort"
       ],
       "extends": [
-        "plugin:tailwindcss/recommended",
-        "airbnb-typescript",
         "next/core-web-vitals",
         "plugin:prettier/recommended"
       ],
