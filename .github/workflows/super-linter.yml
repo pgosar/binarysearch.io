@@ -30,9 +30,11 @@ jobs:
       with:
         node-version: '20'
 
-    # Install Yarn
-    - name: Install Yarn
-      run: npm install -g yarn
+    # Ensure corepack is enabled and Yarn version from .yarnrc.yml is used
+    - name: Enable corepack and use Yarn
+      run: |
+        corepack enable
+        corepack prepare yarn@stable --activate
 
     # Install dependencies using Yarn
     - name: Install Dependencies
