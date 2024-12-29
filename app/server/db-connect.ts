@@ -4,7 +4,6 @@ import type _mongoose from 'mongoose';
 import { connect } from 'mongoose';
 
 declare global {
-  // eslint-disable-next-line
   var mongoose: {
     promise: ReturnType<typeof connect> | null;
     conn: typeof _mongoose | null;
@@ -26,7 +25,7 @@ let cached = global.mongoose;
 
 if (!cached) {
   global.mongoose = { conn: null, promise: null };
-  cached = { conn: null, promise: null };
+cached = { conn: null, promise: null };
 }
 
 async function dbConnect() {

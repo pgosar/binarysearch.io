@@ -1,0 +1,55 @@
+name: Lint and Format Workflow
+permissions:
+  statuses: write
+  contents: write
+  pull-requests: write
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  lint-and-format:
+    name: Lint and Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: ./yarn.lock
+      - name: Enable corepack and use Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Set file permissions
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          sudo chown -R $USER:$USER .
+      - name: Run Prettier
+        run: yarn format
+      - name: Run ESLint
+        run: yarn lint
+      - name: Check for formatting changes
+        run: git diff --exit-code || [ $? -le 1 ]
+        id: format_check
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: apply formatting changes"
+          git push origin HEAD:${{ github.head_ref }}
