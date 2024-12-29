@@ -49,7 +49,7 @@ jobs:
           fi
         continue-on-error: true
       - name: Commit and push changes
-        if: steps.lint_and_check.outcome == 'failure'
+        if: steps.lint_and_check.eslint_failed == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
