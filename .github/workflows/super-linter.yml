@@ -39,22 +39,17 @@ jobs:
           sudo chown -R $USER:$USER .
       - name: Run Prettier
         run: yarn format
-      - name: Run ESLint
-        id: lint_and_check
-        run: |
-          if yarn lint; then
-            echo "::set-output name=eslint_failed::false"
-          else
-            echo "::set-output name=eslint_failed::true"
-          fi
-        continue-on-error: true
-      - name: Commit and push changes
-        if: steps.lint_and_check.eslint_failed == 'true'
+      - name: Check linter, commit and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "chore: apply formatting changes"
-          git push origin HEAD:${{ github.head_ref }}
+          if [ $(yarn lint) ] then 
+            echo "Nothing changed!"
+          else
+            echo "Changes found!" 
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .
+            git commit -m "chore: apply formatting changes"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
