@@ -4,7 +4,7 @@ permissions:
   statuses: write
   contents: write
   pull-requests: write
-  
+
 on:
   pull_request:
     branches:
@@ -59,7 +59,7 @@ jobs:
 
     # Run Prettier with root configuration
     - name: Run Prettier
-      run: yarn prettier --write .
+      run: yarn prettier --write . --ignore-unknown
 
     # Check for changes after formatting
     - name: Check for formatting changes
