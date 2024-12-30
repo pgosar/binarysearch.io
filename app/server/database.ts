@@ -1,7 +1,17 @@
 // lib/dbConnect.tsx
 
+import { extendZod, zodSchema } from '@zodyac/zod-mongoose';
 import type _mongoose from 'mongoose';
 import { connect } from 'mongoose';
+import { model } from 'mongoose';
+import { z } from 'zod';
+
+import { zProblem } from './models/Problem';
+import { zProfile } from './models/Profile';
+import { zTestCase } from './models/Testcase';
+import { zUser } from './models/User';
+
+extendZod(z);
 
 declare global {
   var mongoose: {
@@ -52,5 +62,17 @@ async function dbConnect() {
 
   return cached.conn;
 }
+
+function convertZodToMongoose(name: string, schema: z.ZodObject<any, any, any, any, any>) {
+  const mongooseSchema = zodSchema(schema);
+  return model(name, mongooseSchema);
+}
+
+export const MONGO_DATABASE = {
+  Problem: convertZodToMongoose('Problem', zProblem),
+  Profile: convertZodToMongoose('Profile', zProfile),
+  Testcase: convertZodToMongoose('Testcase', zTestCase),
+  User: convertZodToMongoose('Testcase', zUser),
+};
 
 export default dbConnect;
