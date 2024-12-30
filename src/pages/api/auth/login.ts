@@ -9,8 +9,8 @@ async function redirectToLogin(req: NextApiRequest, res: NextApiResponse) {
       // Perform the redirect (301 Moved Permanently)
       res.writeHead(301, { Location: loginUrl });
     res.end();
-  } catch (error) {
-    console.error('Error during login redirect:', error);
+  } catch (err) {
+    console.error('Error during login redirect:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['GET']);
       return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch (err) {
+    console.error('Unexpected error:', err);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }

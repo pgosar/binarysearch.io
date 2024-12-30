@@ -14,13 +14,13 @@ async function createRoom(req: NextApiRequest, res: NextApiResponse) {
     const newRoom = await createRoomInDb(roomData);
 
     res.status(201).json({ message: 'Room created successfully', data: newRoom });
-  } catch (error) {
+  } catch (err) {
     if (error instanceof z.ZodError) {
       // Handle Zod validation errors
       return res.status(400).json({ message: 'Invalid data', errors: error.errors });
     }
 
-    console.error('Error creating room:', error);
+    console.error('Error creating room:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -37,8 +37,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Allow', ['POST']);
         return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
-  } catch (error) {
-    console.error('Authentication error:', error);
+  } catch (err) {
+    console.error('Authentication error:', err);
     return res.status(401).json({ message: 'Unauthorized' });
   }
 }

@@ -11,7 +11,7 @@ async function getProfile(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     UserSchema.pick({ userId: true }).parse({ userId }); // Use pick to validate only userId part
-  } catch (error) {
+  } catch (err) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ message: 'Invalid or missing userId', errors: error.errors });
     }
@@ -24,8 +24,8 @@ async function getProfile(req: NextApiRequest, res: NextApiResponse) {
     }
 
     res.status(200).json(profile);
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
+  } catch (err) {
+    console.error('Error fetching user profile:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -42,8 +42,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Allow', ['GET']);
         return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
-  } catch (error) {
-    console.error('Authentication error:', error);
+  } catch (err) {
+    console.error('Authentication error:', err);
     return res.status(401).json({ message: 'Unauthorized' });
   }
 }

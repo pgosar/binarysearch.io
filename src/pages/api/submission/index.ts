@@ -18,13 +18,13 @@ async function submitProblem(req: NextApiRequest, res: NextApiResponse) {
     }
 
     res.status(202).json({ message: 'Submission accepted', data: submissionResult });
-  } catch (error) {
+  } catch (err) {
     if (error instanceof z.ZodError) {
       // Handle Zod validation errors
       return res.status(400).json({ message: 'Invalid data', errors: error.errors });
     }
 
-    console.error('Error submitting problem:', error);
+    console.error('Error submitting problem:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -41,8 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Allow', ['POST']);
         return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
-  } catch (error) {
-    console.error('Authentication error:', error);
+  } catch (err) {
+    console.error('Authentication error:', err);
     return res.status(401).json({ message: 'Unauthorized' });
   }
 }

@@ -1,23 +1,25 @@
 // lib/dbConnect.tsx
 
-import { extendZod, zodSchema } from '@zodyac/zod-mongoose';
 import type _mongoose from 'mongoose';
+import type { InferSchemaType } from 'mongoose';
+import type mongoose from 'mongoose';
 import { connect } from 'mongoose';
-import { model } from 'mongoose';
-import { z } from 'zod';
 
-import { zProblem } from './models/Problem';
-import { zProfile } from './models/Profile';
-import { zTestCase } from './models/Testcase';
-import { zUser } from './models/User';
-
-extendZod(z);
+import { ProblemSchema } from './models/Problem';
+import { UserSchema } from './models/User';
 
 declare global {
   var mongoose: {
     promise: ReturnType<typeof connect> | null;
     conn: typeof _mongoose | null;
   };
+
+  var database: {
+    USERS: mongoose.Model<InferSchemaType<typeof UserSchema>>;
+    PROBLEMS: mongoose.Model<InferSchemaType<typeof ProblemSchema>>;
+  };
+
+  var db_init: boolean;
 }
 
 const { MONGODB_URI } = process.env;
@@ -38,7 +40,7 @@ if (!cached) {
   cached = { conn: null, promise: null };
 }
 
-async function dbConnect() {
+export async function dbConnect() {
   if (cached.conn) {
     return cached.conn;
   }
@@ -49,6 +51,13 @@ async function dbConnect() {
     };
 
     cached.promise = connect(MONGODB_URI!, opts).then((mongoose) => {
+      if (global.db_init !== true) {
+        global.database = {
+          PROBLEMS: mongoose.model('Problem', ProblemSchema),
+          USERS: mongoose.model('User', UserSchema),
+        };
+        global.db_init = true;
+      }
       return mongoose;
     });
   }
@@ -62,17 +71,3 @@ async function dbConnect() {
 
   return cached.conn;
 }
-
-function convertZodToMongoose(name: string, schema: z.ZodObject<any, any, any, any, any>) {
-  const mongooseSchema = zodSchema(schema);
-  return model(name, mongooseSchema);
-}
-
-export const MONGO_DATABASE = {
-  Problem: convertZodToMongoose('Problem', zProblem),
-  Profile: convertZodToMongoose('Profile', zProfile),
-  Testcase: convertZodToMongoose('Testcase', zTestCase),
-  User: convertZodToMongoose('Testcase', zUser),
-};
-
-export default dbConnect;

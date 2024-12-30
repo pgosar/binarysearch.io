@@ -11,8 +11,8 @@ async function processCallback(req: NextApiRequest, res: NextApiResponse) {
 
     // Redirect after processing (this is where the redirect logic goes)
     res.end();
-  } catch (error) {
-    console.error('Error processing callback:', error);
+  } catch (err) {
+    console.error('Error processing callback:', err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -25,8 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST']);
       return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
     }
-  } catch (error) {
-    console.error('Unexpected error:', error);
+  } catch (err) {
+    console.error('Unexpected error:', err);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }

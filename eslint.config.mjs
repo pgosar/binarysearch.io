@@ -20,7 +20,7 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/public/', '**/*.md', '.yarn/'],
+    ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/public/', '**/*.md', '.yarn/', '.next/'],
   },
   ...compat.extends('next/core-web-vitals', 'plugin:prettier/recommended'),
   {
