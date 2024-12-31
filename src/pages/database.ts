@@ -1,13 +1,29 @@
 // lib/dbConnect.tsx
 
 import type _mongoose from 'mongoose';
+import type { InferSchemaType } from 'mongoose';
+import type mongoose from 'mongoose';
 import { connect } from 'mongoose';
+
+import { ProblemSchema } from './models/Problem';
+import { ProfileSchema } from './models/Profile';
+import { RoomSchema } from './models/Room';
+import { UserSchema } from './models/User';
 
 declare global {
   var mongoose: {
     promise: ReturnType<typeof connect> | null;
     conn: typeof _mongoose | null;
   };
+
+  var database: {
+    USERS: mongoose.Model<InferSchemaType<typeof UserSchema>>;
+    PROBLEMS: mongoose.Model<InferSchemaType<typeof ProblemSchema>>;
+    ROOMS: mongoose.Model<InferSchemaType<typeof RoomSchema>>;
+    PROFILE: mongoose.Model<InferSchemaType<typeof ProfileSchema>>;
+  };
+
+  var db_init: boolean;
 }
 
 const { MONGODB_URI } = process.env;
@@ -28,7 +44,7 @@ if (!cached) {
   cached = { conn: null, promise: null };
 }
 
-async function dbConnect() {
+export async function dbConnect() {
   if (cached.conn) {
     return cached.conn;
   }
@@ -39,6 +55,15 @@ async function dbConnect() {
     };
 
     cached.promise = connect(MONGODB_URI!, opts).then((mongoose) => {
+      if (global.db_init !== true) {
+        global.database = {
+          PROBLEMS: mongoose.model('Problem', ProblemSchema),
+          USERS: mongoose.model('User', UserSchema),
+          ROOMS: mongoose.model('Room', RoomSchema),
+          PROFILE: mongoose.model('Profile', ProfileSchema),
+        };
+        global.db_init = true;
+      }
       return mongoose;
     });
   }
@@ -52,5 +77,3 @@ async function dbConnect() {
 
   return cached.conn;
 }
-
-export default dbConnect;
