@@ -18,7 +18,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
+const config = [
   {
     ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/public/', '**/*.md', '.yarn/', '.next/'],
   },
@@ -110,3 +110,5 @@ export default [
     },
   },
 ];
+
+export default config;

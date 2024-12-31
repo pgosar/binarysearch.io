@@ -12,7 +12,7 @@ export function buildHandler(callbacks: CallbackParams) {
     const method = req.method as Method;
 
     if (!callbacks[method]) {
-      throw Error("Method not allowed");
+      throw Error('Method not allowed');
     }
     await dbConnect();
     await callbacks[method](req, res);

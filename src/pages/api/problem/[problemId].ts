@@ -20,7 +20,7 @@ async function patchProblem(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const f =  buildHandler({ GET: getProblem, PATCH: patchProblem });
+    const f = buildHandler({ GET: getProblem, PATCH: patchProblem });
     await f(req, res);
   } catch (err) {
     return errorHandler(req, res, err);

@@ -5,7 +5,6 @@ import { errorHandler } from 'src/utils/error-handler';
 
 import { zUserData, zUserId } from '../../models/User';
 
-
 async function getUser(req: NextApiRequest, res: NextApiResponse) {
   const userId = zUserId.parse(req.query);
   const user = await global.database.USERS.findOne({ userId });
@@ -15,7 +14,6 @@ async function getUser(req: NextApiRequest, res: NextApiResponse) {
   }
   return res.status(StatusCodes.OK).json(user);
 }
-
 
 async function patchUser(req: NextApiRequest, res: NextApiResponse) {
   const userId = zUserId.parse(req.query);
@@ -32,7 +30,7 @@ async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const f = buildHandler({ GET: getUser, PATCH: patchUser, DELETE: deleteUser});
+    const f = buildHandler({ GET: getUser, PATCH: patchUser, DELETE: deleteUser });
     await f(req, res);
   } catch (err) {
     return errorHandler(req, res, err);

@@ -1,6 +1,5 @@
+import { Schema } from 'mongoose';
 import { z } from 'zod';
-import {Schema  } from 'mongoose'
-
 
 export const zRoomData = z.object({
   socketId: z.number(),
@@ -12,7 +11,7 @@ export const zRoomData = z.object({
 
 export const zRoomId = z.object({
   userId: z.string(),
-})
+});
 
 export const RoomSchema = new Schema({
   roomId: {
@@ -23,11 +22,10 @@ export const RoomSchema = new Schema({
   socketId: {
     type: Number,
     required: true,
-    unique:true,
+    unique: true,
   },
-  participants: { type: [String], required: true},
-  code: {type: String, required: false},
-  tags: {type: String, required: false},
-  leader: {type: String, required: true}
-
-})
+  participants: { type: [String], required: true },
+  code: { type: String, required: false },
+  tags: { type: String, required: false },
+  leader: { type: String, required: true },
+});

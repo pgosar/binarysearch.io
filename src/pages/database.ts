@@ -6,9 +6,9 @@ import type mongoose from 'mongoose';
 import { connect } from 'mongoose';
 
 import { ProblemSchema } from './models/Problem';
+import { ProfileSchema } from './models/Profile';
+import { RoomSchema } from './models/Room';
 import { UserSchema } from './models/User';
-import {RoomSchema} from "./models/Room";
-import {ProfileSchema} from "./models/Profile";
 
 declare global {
   var mongoose: {
