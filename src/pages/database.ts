@@ -9,6 +9,7 @@ import { ProblemSchema } from './models/Problem';
 import { ProfileSchema } from './models/Profile';
 import { RoomSchema } from './models/Room';
 import { UserSchema } from './models/User';
+import { Server } from 'socket.io';
 
 declare global {
   var mongoose: {
@@ -24,6 +25,7 @@ declare global {
   };
 
   var db_init: boolean;
+  var socket_server: Server;
 }
 
 const { MONGODB_URI } = process.env;
@@ -42,6 +44,7 @@ let cached = global.mongoose;
 if (!cached) {
   global.mongoose = { conn: null, promise: null };
   cached = { conn: null, promise: null };
+  global.socket_server = new Server(3000);
 }
 
 export async function dbConnect() {
