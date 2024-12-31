@@ -1,32 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { dbConnect } from 'src/pages/database';
 
-type HandlerArgs = {
-  getCallback?: Function;
-  postCallback?: Function;
-  patchCallback?: Function;
-  putCallback?: Function;
-  deleteCallback?: Function;
+type Method = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
+
+type CallbackParams = {
+  [K in Method]?: (req: NextApiRequest, res: NextApiResponse) => Promise<NextApiResponse | void>;
 };
 
-export function buildHandler(callbackFunctions: HandlerArgs) {
+export function buildHandler(callbacks: CallbackParams) {
   return async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const callbacks: Record<string, Function | undefined> = {
-      GET: callbackFunctions.getCallback,
-      PATCH: callbackFunctions.patchCallback,
-      POST: callbackFunctions.postCallback,
-      PUT: callbackFunctions.putCallback,
-      DELETE: callbackFunctions.deleteCallback,
-    };
+    const method = req.method as Method;
 
-    // await authenticateJWT(req, res);
-    await dbConnect();
-    const callback = callbacks[req.method ?? ''];
-
-    if (callback !== undefined) {
-      callback(req, res);
-    } else {
-      throw Error('Method not found!');
+    if (!callbacks[method]) {
+      throw Error("Method not allowed");
     }
+    await dbConnect();
+    await callbacks[method](req, res);
   };
 }

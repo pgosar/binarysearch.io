@@ -5,13 +5,13 @@ import { errorHandler } from 'src/utils/error-handler';
 
 import { zProblemData, zProblemId } from '../../models/Problem';
 
-async function getCallback(req: NextApiRequest, res: NextApiResponse) {
+async function getProblem(req: NextApiRequest, res: NextApiResponse) {
   const problemId = zProblemId.parse(req.query);
   const problem = await global.database.PROBLEMS.findOne(problemId);
   return res.status(StatusCodes.OK).json(problem);
 }
 
-async function patchCallback(req: NextApiRequest, res: NextApiResponse) {
+async function patchProblem(req: NextApiRequest, res: NextApiResponse) {
   const problemId = zProblemId.parse(req.query);
   const parsedData = zProblemData.partial().parse(req.body);
   const updatedProblem = await global.database.PROBLEMS.findOneAndUpdate(problemId, parsedData, { upsert: false });
@@ -20,7 +20,7 @@ async function patchCallback(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const f = await buildHandler({ getCallback, patchCallback });
+    const f =  buildHandler({ GET: getProblem, PATCH: patchProblem });
     await f(req, res);
   } catch (err) {
     return errorHandler(req, res, err);

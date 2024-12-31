@@ -1,48 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
 
-import { submitProblemToDb } from '../../../services/problemService';
-import { authenticateJWT } from '../../../utils/auth';
-import { ProblemSchema } from '../../models/Problem';
+import {buildHandler} from "../../../utils/build-handler";
+import {errorHandler} from "../../../utils/error-handler";
+import {StatusCodes} from "http-status-codes";
 
-// Handler for submitting a problem
-async function submitProblem(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    // Validate the request body using ProblemSchema
-    const submissionData = ProblemSchema.pick({ problemId: true, description: true }).parse(req.body);
+async function postCallback(_req: NextApiRequest, res: NextApiResponse) {
 
-    const submissionResult = await submitProblemToDb(submissionData);
+    return res.status(StatusCodes.NOT_IMPLEMENTED)
 
-    if (!submissionResult) {
-      return res.status(400).json({ message: 'Problem submission failed' });
-    }
-
-    res.status(202).json({ message: 'Submission accepted', data: submissionResult });
-  } catch (err) {
-    if (error instanceof z.ZodError) {
-      // Handle Zod validation errors
-      return res.status(400).json({ message: 'Invalid data', errors: error.errors });
-    }
-
-    console.error('Error submitting problem:', err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
 }
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await authenticateJWT(req, res);
-
-    switch (req.method) {
-      case 'POST':
-        return await submitProblem(req, res);
-
-      default:
-        res.setHeader('Allow', ['POST']);
-        return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
-    }
+    const f =  buildHandler({POST: postCallback });
+    await f(req, res);
   } catch (err) {
-    console.error('Authentication error:', err);
-    return res.status(401).json({ message: 'Unauthorized' });
+    return errorHandler(req, res, err);
   }
 }

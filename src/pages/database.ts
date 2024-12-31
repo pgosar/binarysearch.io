@@ -7,6 +7,8 @@ import { connect } from 'mongoose';
 
 import { ProblemSchema } from './models/Problem';
 import { UserSchema } from './models/User';
+import {RoomSchema} from "./models/Room";
+import {ProfileSchema} from "./models/Profile";
 
 declare global {
   var mongoose: {
@@ -17,6 +19,8 @@ declare global {
   var database: {
     USERS: mongoose.Model<InferSchemaType<typeof UserSchema>>;
     PROBLEMS: mongoose.Model<InferSchemaType<typeof ProblemSchema>>;
+    ROOMS: mongoose.Model<InferSchemaType<typeof RoomSchema>>;
+    PROFILE: mongoose.Model<InferSchemaType<typeof ProfileSchema>>;
   };
 
   var db_init: boolean;
@@ -55,6 +59,8 @@ export async function dbConnect() {
         global.database = {
           PROBLEMS: mongoose.model('Problem', ProblemSchema),
           USERS: mongoose.model('User', UserSchema),
+          ROOMS: mongoose.model('Room', RoomSchema),
+          PROFILE: mongoose.model('Profile', ProfileSchema),
         };
         global.db_init = true;
       }

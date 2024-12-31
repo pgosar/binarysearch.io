@@ -1,92 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
-
-import { getRoomFromDb, updateRoomInDb } from '../../../services/roomService'; // Assumes these are in your service layer
-import { authenticateJWT } from '../../../utils/auth';
-import { RoomSchema } from '../../models/Room';
+import {zRoomData, zRoomId} from "../../models/Room";
+import {StatusCodes} from "http-status-codes";
+import {buildHandler} from "../../../utils/build-handler";
+import {errorHandler} from "../../../utils/error-handler";
 
 // Handler for getting room details
-async function getRoom(req: NextApiRequest, res: NextApiResponse) {
-  const { roomId } = req.query;
+async function getRoom(req: NextApiRequest, res: NextApiResponse){
+  const roomId = zRoomId.parse(req.query)
+  const room = await global.database.ROOMS.findOne(roomId);
 
-  try {
-    RoomSchema.pick({ roomId: true }).parse({ roomId }); // Validate only roomId
-  } catch (err) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ message: 'Invalid or missing roomId', errors: error.errors });
-    }
+  if (!room){
+    return res.status(StatusCodes.NOT_FOUND).json({message: "Room not found"})
   }
 
-  if (!roomId || Array.isArray(roomId)) {
-    return res.status(400).json({ message: 'Invalid or missing roomId' });
-  }
-
-  try {
-    const room = await getRoomFromDb(roomId as string);
-
-    if (!room) {
-      return res.status(404).json({ message: `Room with ID ${roomId} not found` });
-    }
-
-    res.status(200).json({ message: `Room found`, data: room });
-  } catch (err) {
-    console.error('Error fetching room:', err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  return res.status(StatusCodes.OK).json(room)
 }
-
 // Handler for updating room details
-async function patchRoom(req: NextApiRequest, res: NextApiResponse) {
-  const { roomId } = req.query;
+async function patchRoom(req: NextApiRequest, res: NextApiResponse){
+  const roomId = zRoomId.parse(req.query)
+  const updateFields = zRoomData.partial().parse(req.body);
+  const updatedRoom = await global.database.ROOMS.findOneAndUpdate(roomId, updateFields, {new: true} );
+  return res.status(StatusCodes.OK).json(updatedRoom)
 
-  // Validate roomId using Zod (ensure it's a string and matches the expected roomId type)
-  try {
-    RoomSchema.pick({ roomId: true }).parse({ roomId }); // Validate only roomId
-  } catch (err) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ message: 'Invalid or missing roomId', errors: error.errors });
-    }
-  }
-
-  if (!roomId || Array.isArray(roomId)) {
-    return res.status(400).json({ message: 'Invalid or missing roomId' });
-  }
-
-  // Validate the request body using the RoomSchema (for name and description in patch)
-  const { name, description } = req.body;
-  if (!name || !description) {
-    return res.status(400).json({ message: 'Both name and description are required to update the room' });
-  }
-
-  try {
-    const updatedRoom = await updateRoomInDb(roomId as string, { name, description });
-
-    if (!updatedRoom) {
-      return res.status(404).json({ message: `Room with ID ${roomId} not found` });
-    }
-
-    res.status(200).json({ message: `Room updated successfully`, data: updatedRoom });
-  } catch (err) {
-    console.error('Error updating room:', err);
-    res.status(500).json({ message: 'Internal server error' });
-  }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await authenticateJWT(req, res);
-
-    switch (req.method) {
-      case 'GET':
-        return await getRoom(req, res);
-      case 'PATCH':
-        return await patchRoom(req, res);
-      default:
-        res.setHeader('Allow', ['GET', 'PATCH']);
-        return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
-    }
+    const f = buildHandler({GET: getRoom, PATCH: patchRoom});
+    await f(req, res);
   } catch (err) {
-    console.error('Authentication error:', err);
-    return res.status(401).json({ message: 'Unauthorized' });
+    return errorHandler(req, res, err);
   }
 }

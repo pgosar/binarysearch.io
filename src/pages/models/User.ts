@@ -2,7 +2,7 @@ import { Schema, Types } from 'mongoose';
 import { v4 } from 'uuid';
 import { z } from 'zod';
 
-// Set primary keys on the userId, username & email since we want these to be unique.
+// Set primary in ukeys on the userId, username & email since we want these to be unique.
 export const zUserData = z.object({
   username: z.string(),
   email: z.string().email(),

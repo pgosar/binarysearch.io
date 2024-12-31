@@ -26,6 +26,7 @@ export const ProblemSchema = new Schema({
   privateTestCases: [{ type: Schema.Types.ObjectId, ref: 'Testcase' }],
 });
 
+// Settin problem id in monotonic increasing order
 ProblemSchema.pre('save', async function () {
   if (this.problemId === undefined) {
     const ct = await global.database.PROBLEMS.countDocuments();
