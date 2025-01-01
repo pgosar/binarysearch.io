@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { dbConnect } from 'src/pages/database';
+import { dbConnect } from 'src/database';
 
 type Method = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
 

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { zUserData } from 'src/pages/models/User';
+import { zUserData } from 'src/models/User';
 import { buildHandler } from 'src/utils/build-handler';
 import { errorHandler } from 'src/utils/error-handler';
 
