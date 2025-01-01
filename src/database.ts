@@ -1,18 +1,17 @@
 // lib/dbConnect.tsx
 
+import dotenv from 'dotenv';
 import type _mongoose from 'mongoose';
 import type { InferSchemaType } from 'mongoose';
 import type mongoose from 'mongoose';
 import { connect } from 'mongoose';
+import { Server } from 'socket.io';
 
+import { ParticipantSchema } from './models/Participant';
 import { ProblemSchema } from './models/Problem';
 import { ProfileSchema } from './models/Profile';
 import { RoomSchema } from './models/Room';
 import { UserSchema } from './models/User';
-
-import { Server } from 'socket.io';
-import { ParticipantSchema } from './models/Participant';
-import dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
 

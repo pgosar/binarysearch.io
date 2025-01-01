@@ -1,6 +1,8 @@
 import { createServer } from 'node:http';
+
 import next from 'next';
 import { Server } from 'socket.io';
+
 import { connectCallback, dbConnect, disconnectCallback, joinCallback, leaveCallback } from './database';
 
 const dev = process.env.ENV !== 'production';
