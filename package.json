@@ -12,9 +12,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "yarn tsx src/server.ts",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "ENV=production yarn tsx src/server.ts",
     "format": "prettier --write .",
     "lint": "eslint . ",
     "type": "tsc --noEmit",
@@ -27,6 +27,7 @@
     "@zodyac/zod-mongoose": "^3.0.0",
     "babel-plugin-react-compiler": "19.0.0-beta-b2e8e9c-20241220",
     "classnames": "^2.5.1",
+    "dotenv": "^16.4.7",
     "eslintrc": "^1.0.6",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
@@ -73,6 +74,8 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
     "zod": "^3.24.1"

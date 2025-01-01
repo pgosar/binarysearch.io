@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { buildHandler } from '../../../utils/build-handler';
 import { errorHandler } from '../../../utils/error-handler';
-import { zUserId } from '../../models/User';
+import { zUserId } from '../../../models/User';
 
 // Handler for getting user profile
 async function getProfile(req: NextApiRequest, res: NextApiResponse) {

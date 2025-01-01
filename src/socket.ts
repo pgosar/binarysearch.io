@@ -1,6 +1,6 @@
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
 export const socket = {
-    socket: io(),
-    isServer: typeof window !== "undefined"
-}
+  socket: io(),
+  isServer: typeof window !== 'undefined',
+};

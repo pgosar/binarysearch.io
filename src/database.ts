@@ -9,7 +9,12 @@ import { ProblemSchema } from './models/Problem';
 import { ProfileSchema } from './models/Profile';
 import { RoomSchema } from './models/Room';
 import { UserSchema } from './models/User';
+
 import { Server } from 'socket.io';
+import { ParticipantSchema } from './models/Participant';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.local' });
 
 declare global {
   var mongoose: {
@@ -22,10 +27,12 @@ declare global {
     PROBLEMS: mongoose.Model<InferSchemaType<typeof ProblemSchema>>;
     ROOMS: mongoose.Model<InferSchemaType<typeof RoomSchema>>;
     PROFILE: mongoose.Model<InferSchemaType<typeof ProfileSchema>>;
+    PARTICIPANTS: mongoose.Model<InferSchemaType<typeof ParticipantSchema>>;
   };
 
   var db_init: boolean;
   var socket_server: Server;
+  var user_socket_mapping: Map<string, string>;
 }
 
 const { MONGODB_URI } = process.env;
@@ -64,6 +71,7 @@ export async function dbConnect() {
           USERS: mongoose.model('User', UserSchema),
           ROOMS: mongoose.model('Room', RoomSchema),
           PROFILE: mongoose.model('Profile', ProfileSchema),
+          PARTICIPANTS: mongoose.model('Participant', ParticipantSchema),
         };
         global.db_init = true;
       }
@@ -79,4 +87,34 @@ export async function dbConnect() {
   }
 
   return cached.conn;
+}
+
+export async function connectCallback(userId: string, socketId: string) {
+  await global.database.PARTICIPANTS.findOneAndUpdate(
+    { socketId },
+    { userId, socketId, roomId: null, score: 0 },
+    { upsert: true },
+  );
+  console.log('User connected!');
+}
+
+export async function joinCallback(socketId: string, roomId: string) {
+  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ socketId }, { roomId });
+  // const roomPromise = global.database.ROOMS.findOneAndUpdate({roomId}, {$addToSet: {$participants: socketId}});
+  // await Promise.allSettled([userPromise, roomPromise]);
+  await userPromise;
+  console.log('User joined room!');
+}
+
+export async function leaveCallback(socketId: string) {
+  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ socketId }, { roomId: null });
+  // const roomPromise = global.database.ROOMS.findOneAndUpdate({roomId}, {$pull: {$participants: socketId}});
+  // await Promise.allSettled([userPromise, roomPromise]);
+  await userPromise;
+  console.log('User left room!');
+}
+
+export async function disconnectCallback(socketId: string) {
+  await global.database.PARTICIPANTS.findOneAndDelete({ socketId });
+  console.log('User disconnected!');
 }

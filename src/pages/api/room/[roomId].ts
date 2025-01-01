@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { buildHandler } from '../../../utils/build-handler';
 import { errorHandler } from '../../../utils/error-handler';
-import { zRoomData, zRoomId } from '../../models/Room';
+import { zRoomData, zRoomId } from '../../../models/Room';
 
 // Handler for getting room details
 async function getRoom(req: NextApiRequest, res: NextApiResponse) {
