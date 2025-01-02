@@ -24,29 +24,29 @@ app.prepare().then(() => {
 
   io.on('connection', async (socket) => {
     await dbConnect();
-    console.log('user connected');
-    const userId = socket.id;
     const socketId = socket.id;
 
-    await connectCallback(userId, socketId);
+    socket.on('initialConnection', async (token) => {
+      await connectCallback(token, socketId);
+    });
 
-    socket.on('joinRoom', async (roomId) => {
+    socket.on('joinRoom', async (token, roomId) => {
       socket.join(roomId);
       socket.to(roomId).emit('userJoined', socket.id);
-      await joinCallback(socketId, roomId);
+      await joinCallback(token, roomId);
     });
 
-    socket.on('leaveRoom', async (roomId) => {
+    socket.on('leaveRoom', async (token, roomId) => {
       socket.leave(roomId);
       io.to(roomId).emit('userLeft', socket.id);
-      await leaveCallback(socketId);
+      await leaveCallback(token);
     });
 
-    socket.on('disconnect', async () => {
-      await disconnectCallback(socketId);
+    socket.on('disconnect', async (token) => {
+      await disconnectCallback(token);
     });
 
-    socket.on('sendMessage', (message, room) => {
+    socket.on('sendMessage', (token, message, room) => {
       socket.to(room).emit('message', message);
     });
   });

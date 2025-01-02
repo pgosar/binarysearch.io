@@ -6,9 +6,9 @@ interface AuthProps {
 }
 
 export default function Auth({ children }: AuthProps) {
-  const { data: session } = useSession();
+  const { data } = useSession();
 
-  if (!session) {
+  if (!data) {
     return (
       <div>
         <p>You are not signed in</p>
@@ -20,7 +20,8 @@ export default function Auth({ children }: AuthProps) {
   return (
     <div>
       <div>
-        <p>Welcome, {session.user?.name}!</p>
+        <p>Welcome, {data.user?.name}!</p>
+        <p>Id: {data?.user?.id}</p>
         <button onClick={() => signOut()}>Sign out</button>
       </div>
       {children}

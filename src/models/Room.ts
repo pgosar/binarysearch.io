@@ -7,7 +7,7 @@ const ROOM_CODE_LENGTH = 6;
 
 export const zRoomData = z.object({
   tags: z.array(z.string()),
-  isPublic: z.boolean(),
+  isPublic: z.boolean().optional(),
 });
 
 export const zRoomId = z.object({
@@ -19,7 +19,7 @@ export const RoomSchema = new Schema({
   roomId: { type: String, required: false, unique: true, default: () => v4() },
   code: { type: String, required: false, unique: true, default: () => generateRandomString(ROOM_CODE_LENGTH) },
   participants: { type: [String], required: false, default: () => [] },
-  isPublic: { type: Boolean, required: true },
+  isPublic: { type: Boolean, required: false, default: () => false },
   tags: { type: String, required: false },
   leader: { type: String, required: true },
 });
