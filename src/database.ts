@@ -86,24 +86,26 @@ export async function dbConnect() {
 
 export async function connectCallback(userId: string, socketId: string) {
   await global.database.PARTICIPANTS.findOneAndUpdate(
-    { socketId },
+    { userId },
     { userId, socketId, roomId: null, score: 0 },
     { upsert: true },
   );
-  console.log('User connected!');
 }
 
-export async function joinCallback(socketId: string, roomId: string) {
-  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ socketId }, { roomId });
-  const roomPromise = global.database.ROOMS.findOneAndUpdate({ socketId }, { $push: { $participants: socketId } });
+export async function joinCallback(userId: string, roomId: string) {
+  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ userId }, { roomId });
+  const roomPromise = global.database.ROOMS.findOneAndUpdate(
+    { roomId },
+    { $push: { $participants: userId } },
+    { upsert: true },
+  );
   await Promise.allSettled([userPromise, roomPromise]);
-  console.log('User joined room!');
 }
 
-export async function leaveCallback(socketId: string) {
-  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ socketId }, { roomId: null });
+export async function leaveCallback(userId: string) {
+  const userPromise = global.database.PARTICIPANTS.findOneAndUpdate({ userId }, { roomId: null });
 
-  const roomData = await global.database.ROOMS.findOne({ participants: socketId });
+  const roomData = await global.database.ROOMS.findOne({ participants: userId });
 
   if (!roomData) {
     await userPromise;
@@ -111,7 +113,7 @@ export async function leaveCallback(socketId: string) {
   }
 
   let participants = roomData.participants ?? [];
-  participants = participants.filter((x) => x != socketId);
+  participants = participants.filter((x) => x != userId);
 
   let roomPromise;
   if (participants.length == 0) {
@@ -124,11 +126,9 @@ export async function leaveCallback(socketId: string) {
   }
 
   await Promise.allSettled([userPromise, roomPromise]);
-  console.log('User left room!');
 }
 
-export async function disconnectCallback(socketId: string) {
-  await leaveCallback(socketId);
-  await global.database.PARTICIPANTS.findOneAndDelete({ socketId });
-  console.log('User disconnected!');
+export async function disconnectCallback(userId: string) {
+  await leaveCallback(userId);
+  await global.database.PARTICIPANTS.findOneAndDelete({ userId });
 }
