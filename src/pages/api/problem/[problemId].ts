@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildHandler } from 'src/utils/build-handler';
 import { errorHandler } from 'src/utils/error-handler';
 
-import { zProblemData, zProblemId } from '../../models/Problem';
+import { zProblemData, zProblemId } from '../../../models/Problem';
 
 async function getProblem(req: NextApiRequest, res: NextApiResponse) {
   const problemId = zProblemId.parse(req.query);

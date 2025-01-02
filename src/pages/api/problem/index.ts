@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildHandler } from 'src/utils/build-handler';
 import { errorHandler } from 'src/utils/error-handler';
 
-import { zProblemData } from '../../models/Problem';
+import { zProblemData } from '../../../models/Problem';
 
 // Return all problems
 async function getCallback(_: NextApiRequest, res: NextApiResponse) {
