@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { zRoomData, zRoomId } from '../../../models/Room';
 import { buildHandler } from '../../../utils/build-handler';
 import { errorHandler } from '../../../utils/error-handler';
-import { zRoomData, zRoomId } from '../../models/Room';
 
 // Handler for getting room details
 async function getRoom(req: NextApiRequest, res: NextApiResponse) {

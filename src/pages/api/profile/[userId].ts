@@ -1,9 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { zUserId } from '../../../models/User';
 import { buildHandler } from '../../../utils/build-handler';
 import { errorHandler } from '../../../utils/error-handler';
-import { zUserId } from '../../models/User';
 
 // Handler for getting user profile
 async function getProfile(req: NextApiRequest, res: NextApiResponse) {

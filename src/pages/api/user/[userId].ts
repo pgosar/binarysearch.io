@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildHandler } from 'src/utils/build-handler';
 import { errorHandler } from 'src/utils/error-handler';
 
-import { zUserData, zUserId } from '../../models/User';
+import { zUserData, zUserId } from '../../../models/User';
 
 async function getUser(req: NextApiRequest, res: NextApiResponse) {
   const userId = zUserId.parse(req.query);

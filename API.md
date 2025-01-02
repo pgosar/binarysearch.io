@@ -53,7 +53,6 @@ currentlyRunning: True,
 ### Rooms Object (In-Memory Mapping)
 
 roomId: {  
- socketId: Integer,
 participants: Arr[userIds],
 code: String,
 tags: Arr[String],
