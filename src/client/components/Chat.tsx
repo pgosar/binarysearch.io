@@ -1,9 +1,13 @@
+import { useSession } from 'next-auth/react';
 import React from 'react';
 import { useEffect, useState } from 'react';
 
 import { socket } from '../../socket';
 
 export default function Chat() {
+  const { data } = useSession();
+  const id = data?.user?.id;
+
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState('N/A');
   const [room, setRoom] = useState('');
@@ -11,19 +15,19 @@ export default function Chat() {
   const [allMessages, setAllMessages] = useState<string[]>([]);
   const joinRoom = () => {
     if (room && socket.socket) {
-      socket.socket.emit('joinRoom', room);
+      socket.socket.emit('joinRoom', id, room);
     }
   };
 
   const leaveRoom = () => {
     if (room && socket.socket) {
-      socket.socket.emit('leaveRoom', room);
+      socket.socket.emit('leaveRoom', id, room);
     }
   };
 
   const sendMessage = () => {
     if (room && message && socket.socket) {
-      socket.socket.emit('sendMessage', room);
+      socket.socket.emit('sendMessage', id, room);
     }
   };
 
@@ -45,6 +49,8 @@ export default function Chat() {
       socket.socket.io.engine.on('upgrade', (transport) => {
         setTransport(transport.name);
       });
+
+      socket.socket.emit('initialConnection', id);
     }
 
     function onDisconnect() {
