@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '*'
+      - '!main'
 
 jobs:
   check-branch-name:
@@ -12,7 +13,10 @@ jobs:
       - name: Check if branch name follows the convention
         run: |
           branch_name="${GITHUB_REF#refs/heads/}"
-          regex='^(feature|refactor|test|fix|chore)\/[a-zA-Z0-9\-]+$'
+          regex='^(feature|refactor|test|fix|chore)\/[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$'
           if [[ ! "$branch_name" =~ $regex ]]; then
-            echo "Branch name '$branch_name' does not match the required pattern!" && exit 1
+            echo "Branch name '$branch_name' does not match the required pattern!"
+            echo "Expected pattern: 'type/description' where type is one of [feature, refactor, test, fix, chore]."
+            echo "Description can only contain alphanumeric characters and single hyphens."
+            exit 1
           fi
