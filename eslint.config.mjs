@@ -18,9 +18,9 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
+const config = [
   {
-    ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/public/', '**/*.md', '.yarn/'],
+    ignores: ['**/node_modules/', '**/build/', '**/dist/', '**/public/', '**/*.md', '.yarn/', '.next/', '**/*.yml'],
   },
   ...compat.extends('next/core-web-vitals', 'plugin:prettier/recommended'),
   {
@@ -110,3 +110,5 @@ export default [
     },
   },
 ];
+
+export default config;

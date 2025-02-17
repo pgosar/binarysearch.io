@@ -48,3 +48,4 @@ build/
 .next/
 .env.local
 .env
+.vscode/
